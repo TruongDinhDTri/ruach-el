@@ -61,6 +61,7 @@ REQUIRED_FILES=(
     "$PROMPTS_DIR/persona.txt"
     "$PROMPTS_DIR/behavior.txt"
     "$PROMPTS_DIR/mission.txt"
+    "$PROMPTS_DIR/end-session.txt"
     "$AGENT_PATH/memory/global-memory.md"
     "$AGENT_PATH/memory/relationship-memory.md"
     "$AGENT_PATH/memory/project-memory.md"
