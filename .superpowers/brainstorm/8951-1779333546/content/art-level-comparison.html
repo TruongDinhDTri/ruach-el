@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Art Level Comparison</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #1a1a2e;
+    color: #e0ddd8;
+    padding: 32px 24px;
+    min-height: 100vh;
+  }
+  h1 {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 14px;
+    color: #8a8580;
+    margin-bottom: 36px;
+  }
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .card {
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 2px solid transparent;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  }
+  .card.selected {
+    border-color: #f8b4c8;
+    box-shadow: 0 0 0 3px rgba(248,180,200,0.3);
+  }
+  .card-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 16px 24px 0;
+    color: #f8b4c8;
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    padding: 6px 24px 4px;
+    color: #fff;
+  }
+  .card-desc {
+    font-size: 13px;
+    color: #b0aaa4;
+    padding: 0 24px 16px;
+    line-height: 1.6;
+  }
+
+  /* ── OPTION A: Subtle Accents ── */
+  .mockup-a {
+    background: linear-gradient(135deg, #fdf2f4, #fef6ee);
+    padding: 20px;
+  }
+  .mockup-a .mock-layout {
+    display: flex;
+    gap: 16px;
+    min-height: 280px;
+  }
+  .mockup-a .mock-sidebar {
+    width: 200px;
+    background: #fff;
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .mockup-a .mock-sidebar .hub-item {
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #5c5752;
+    margin-bottom: 4px;
+  }
+  .mockup-a .mock-sidebar .hub-item.active {
+    background: #fde8ec;
+    color: #d4627a;
+  }
+  .mockup-a .mock-sidebar .sub-item {
+    padding: 5px 12px 5px 28px;
+    font-size: 11px;
+    color: #8a8580;
+  }
+  .mockup-a .mock-main {
+    flex: 1;
+    background: #fff;
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .mockup-a .mock-breadcrumb {
+    font-size: 11px;
+    color: #b0aaa4;
+    margin-bottom: 12px;
+    font-family: 'DM Mono', monospace;
+  }
+  .mockup-a .mock-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #2d2a26;
+    margin-bottom: 8px;
+  }
+  .mockup-a .mock-callout {
+    background: linear-gradient(135deg, #fef6ee, #fdf2f4);
+    border-left: 3px solid #f8b4c8;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 12px;
+    color: #5c5752;
+    margin: 12px 0;
+  }
+  .mockup-a .mock-step {
+    background: #fafaf8;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: #5c5752;
+    margin: 6px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .mockup-a .step-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    background: #f8b4c8;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  /* Subtle sakura accent */
+  .mockup-a .sakura-accent {
+    position: absolute;
+    top: 12px;
+    right: 20px;
+    font-size: 28px;
+    opacity: 0.15;
+  }
+  .mockup-a .mock-main { position: relative; }
+
+  /* ── OPTION B: Atmospheric ── */
+  .mockup-b {
+    background: linear-gradient(180deg, #e8c4b8, #f5ddd3 30%, #fdf2f4 60%, #fef9f5);
+    padding: 0;
+  }
+  .mockup-b .hero-landscape {
+    height: 120px;
+    background: linear-gradient(180deg,
+      #f4a683 0%,
+      #f8c4a8 25%,
+      #fddcc8 50%,
+      transparent 100%
+    );
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .mockup-b .mountains {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 70px;
+  }
+  .mockup-b .mountain {
+    position: absolute;
+    bottom: 0;
+    border-left: solid transparent;
+    border-right: solid transparent;
+    border-bottom: solid;
+  }
+  .mockup-b .m1 {
+    left: 5%; border-left-width: 80px; border-right-width: 80px;
+    border-bottom-width: 65px; border-bottom-color: #d4927a; opacity: 0.4;
+  }
+  .mockup-b .m2 {
+    left: 25%; border-left-width: 120px; border-right-width: 100px;
+    border-bottom-width: 55px; border-bottom-color: #c8846e; opacity: 0.3;
+  }
+  .mockup-b .m3 {
+    right: 10%; border-left-width: 90px; border-right-width: 110px;
+    border-bottom-width: 60px; border-bottom-color: #d49880; opacity: 0.35;
+  }
+  .mockup-b .sun {
+    position: absolute;
+    top: 15px;
+    right: 25%;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #ffe4b8, #f8c898);
+    opacity: 0.7;
+  }
+  .mockup-b .hero-title {
+    position: relative;
+    z-index: 2;
+    font-size: 16px;
+    font-weight: 700;
+    color: #6b3a2a;
+    padding-bottom: 16px;
+  }
+  .mockup-b .content-area {
+    padding: 20px;
+    display: flex;
+    gap: 16px;
+    min-height: 200px;
+  }
+  .mockup-b .mock-sidebar-b {
+    width: 180px;
+    background: rgba(255,255,255,0.85);
+    border-radius: 14px;
+    padding: 14px;
+    backdrop-filter: blur(8px);
+  }
+  .mockup-b .mock-sidebar-b .s-item {
+    padding: 6px 10px;
+    font-size: 11px;
+    color: #5c5752;
+    border-radius: 8px;
+    margin-bottom: 3px;
+  }
+  .mockup-b .mock-sidebar-b .s-item.active {
+    background: rgba(212,98,122,0.12);
+    color: #d4627a;
+    font-weight: 600;
+  }
+  .mockup-b .mock-main-b {
+    flex: 1;
+    background: rgba(255,255,255,0.9);
+    border-radius: 14px;
+    padding: 20px;
+    backdrop-filter: blur(8px);
+  }
+  .mockup-b .mock-main-b .m-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #2d2a26;
+    margin-bottom: 10px;
+  }
+  .mockup-b .mock-main-b .m-text {
+    font-size: 12px;
+    color: #5c5752;
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+  .mockup-b .mock-main-b .m-card {
+    background: linear-gradient(135deg, #fef6ee, #fdf2f4);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: #5c5752;
+    border-left: 3px solid #f4a683;
+    margin: 8px 0;
+  }
+
+  /* ── OPTION C: Full Ghibli ── */
+  .mockup-c {
+    background: linear-gradient(180deg, #f8c4a8, #e8a088 15%, #c4d4a0 40%, #a8c8a0 60%, #d4e8d0 80%, #f0f4ec);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .mockup-c .scene {
+    height: 180px;
+    position: relative;
+    overflow: hidden;
+  }
+  .mockup-c .sky {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 100px;
+    background: linear-gradient(180deg, #f4a68350, #f8c89840, transparent);
+  }
+  .mockup-c .ghibli-sun {
+    position: absolute;
+    top: 20px;
+    left: 35%;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #ffe8c0, #f8c898, transparent);
+    opacity: 0.8;
+  }
+  /* Trees and nature */
+  .mockup-c .tree {
+    position: absolute;
+    bottom: 0;
+  }
+  .mockup-c .tree .trunk {
+    width: 8px;
+    height: 40px;
+    background: #8b6b4a;
+    margin: 0 auto;
+    border-radius: 2px;
+  }
+  .mockup-c .tree .leaves {
+    border-radius: 50%;
+    background: radial-gradient(circle, #a8c888, #7aaa68);
+  }
+  .mockup-c .t1 { left: 5%; }
+  .mockup-c .t1 .leaves { width: 50px; height: 45px; margin-left: -21px; }
+  .mockup-c .t2 { left: 15%; }
+  .mockup-c .t2 .leaves { width: 40px; height: 38px; margin-left: -16px; }
+  .mockup-c .t3 { right: 8%; }
+  .mockup-c .t3 .leaves { width: 55px; height: 48px; margin-left: -23px; }
+  .mockup-c .t4 { right: 20%; }
+  .mockup-c .t4 .leaves { width: 35px; height: 32px; margin-left: -13px; }
+  /* Ground */
+  .mockup-c .ground {
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    height: 50px;
+    background: linear-gradient(180deg, #90b878, #78a860);
+    border-radius: 50% 50% 0 0 / 20px 20px 0 0;
+  }
+  /* Flowers */
+  .mockup-c .flower {
+    position: absolute;
+    bottom: 45px;
+    font-size: 14px;
+  }
+  .mockup-c .f1 { left: 30%; }
+  .mockup-c .f2 { left: 50%; font-size: 12px; }
+  .mockup-c .f3 { right: 35%; }
+  .mockup-c .f4 { left: 70%; font-size: 11px; }
+  /* Floating content cards over the scene */
+  .mockup-c .scene-title {
+    position: absolute;
+    top: 85px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 18px;
+    font-weight: 700;
+    color: #4a3a2a;
+    text-shadow: 0 1px 3px rgba(255,255,255,0.5);
+    white-space: nowrap;
+  }
+  .mockup-c .floating-cards {
+    padding: 20px;
+    display: flex;
+    gap: 14px;
+    position: relative;
+    z-index: 2;
+    min-height: 180px;
+  }
+  .mockup-c .f-sidebar {
+    width: 170px;
+    background: rgba(255,255,254,0.88);
+    border-radius: 16px;
+    padding: 14px;
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.5);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  }
+  .mockup-c .f-sidebar .fi {
+    padding: 6px 10px;
+    font-size: 11px;
+    color: #5c5752;
+    border-radius: 8px;
+    margin-bottom: 3px;
+  }
+  .mockup-c .f-sidebar .fi.active {
+    background: rgba(144,184,120,0.2);
+    color: #4a7a38;
+    font-weight: 600;
+  }
+  .mockup-c .f-main {
+    flex: 1;
+    background: rgba(255,255,254,0.92);
+    border-radius: 16px;
+    padding: 20px;
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.5);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  }
+  .mockup-c .f-main .fm-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #2d2a26;
+    margin-bottom: 4px;
+  }
+  .mockup-c .f-main .fm-phase {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    color: #78a860;
+    background: #e8f4e0;
+    padding: 2px 8px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+  }
+  .mockup-c .f-main .fm-text {
+    font-size: 12px;
+    color: #5c5752;
+    line-height: 1.6;
+    margin-bottom: 8px;
+  }
+  .mockup-c .f-main .fm-insight {
+    background: linear-gradient(135deg, #f0f8e8, #e8f4e0);
+    border-left: 3px solid #90b878;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: #4a5a3a;
+  }
+  /* Sakura petals floating */
+  .mockup-c .petal {
+    position: absolute;
+    font-size: 12px;
+    opacity: 0.4;
+    animation: float 6s ease-in-out infinite;
+  }
+  .mockup-c .p1 { top: 30px; left: 40%; animation-delay: 0s; }
+  .mockup-c .p2 { top: 60px; right: 30%; animation-delay: 1.5s; }
+  .mockup-c .p3 { top: 15px; left: 60%; animation-delay: 3s; font-size: 10px; }
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(10px) rotate(15deg); }
+  }
+
+  /* Selection state */
+  .selected-indicator {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #f8b4c8;
+    color: #2d2a26;
+    padding: 10px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(248,180,200,0.4);
+  }
+</style>
+</head>
+<body>
+
+<h1>How far should we push the Ghibli style?</h1>
+<p class="subtitle">Click the one that feels right for your playbook</p>
+
+<div class="cards">
+
+  <!-- OPTION A -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)" style="background:#1e1e30;">
+    <div class="card-label">Option A</div>
+    <div class="card-title">Subtle Accents</div>
+    <div class="card-desc">Clean modern UI with soft pastels. Tiny nature touches — a sakura branch in corners, soft gradients. The UI is the star, Ghibli is just seasoning.</div>
+    <div class="mockup-a">
+      <div class="mock-layout">
+        <div class="mock-sidebar">
+          <div class="hub-item active">SDLC</div>
+          <div class="sub-item">1. Ideation</div>
+          <div class="sub-item">2. System Design</div>
+          <div class="sub-item">3. UI/UX Design</div>
+          <div class="hub-item">Codebase</div>
+          <div class="hub-item">Feature Dev</div>
+        </div>
+        <div class="mock-main">
+          <span class="sakura-accent">🌸</span>
+          <div class="mock-breadcrumb">SDLC &gt; Ideation &gt; Problem Statement</div>
+          <div class="mock-title">Problem Statement</div>
+          <div class="mock-callout">Define what problem your app solves. Be specific.</div>
+          <div class="mock-step"><span class="step-num">1</span> Identify the core pain point</div>
+          <div class="mock-step"><span class="step-num">2</span> Define target users</div>
+          <div class="mock-step"><span class="step-num">3</span> Write one-sentence problem statement</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPTION B -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)" style="background:#1e1e30;">
+    <div class="card-label">Option B</div>
+    <div class="card-title">Atmospheric</div>
+    <div class="card-desc">Each hub has a landscape hero illustration. Content stays clean, but the atmosphere is immersive — like the app mockups in your inspiration images. Balanced.</div>
+    <div class="mockup-b">
+      <div class="hero-landscape">
+        <div class="sun"></div>
+        <div class="mountains">
+          <div class="mountain m1"></div>
+          <div class="mountain m2"></div>
+          <div class="mountain m3"></div>
+        </div>
+        <div class="hero-title">SDLC — Ideation & Requirements</div>
+      </div>
+      <div class="content-area">
+        <div class="mock-sidebar-b">
+          <div class="s-item active">1. Ideation</div>
+          <div class="s-item">2. System Design</div>
+          <div class="s-item">3. UI/UX Design</div>
+          <div class="s-item">4. Database</div>
+          <div class="s-item">5. Backend</div>
+        </div>
+        <div class="mock-main-b">
+          <div class="m-title">Problem Statement</div>
+          <div class="m-text">Define what problem your app solves before writing any code.</div>
+          <div class="m-card">Insight: Most solo devs skip this step — and that's exactly why they freeze.</div>
+          <div class="m-card">Step 1: Identify the core pain point your users face.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPTION C -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)" style="background:#1e1e30;">
+    <div class="card-label">Option C</div>
+    <div class="card-title">Full Ghibli Energy</div>
+    <div class="card-desc">Rich illustrated scenes for each phase. The whole app feels like walking through an animated world. Bold, unique, immersive. Each phase has its own landscape.</div>
+    <div class="mockup-c">
+      <div class="scene">
+        <div class="sky"></div>
+        <div class="ghibli-sun"></div>
+        <span class="petal p1">🌸</span>
+        <span class="petal p2">🌸</span>
+        <span class="petal p3">🌸</span>
+        <div class="tree t1"><div class="leaves"></div><div class="trunk"></div></div>
+        <div class="tree t2"><div class="leaves"></div><div class="trunk"></div></div>
+        <div class="tree t3"><div class="leaves"></div><div class="trunk"></div></div>
+        <div class="tree t4"><div class="leaves"></div><div class="trunk"></div></div>
+        <div class="ground"></div>
+        <span class="flower f1">🌷</span>
+        <span class="flower f2">🌼</span>
+        <span class="flower f3">🌷</span>
+        <span class="flower f4">🌺</span>
+        <div class="scene-title">Phase 1 — Ideation & Requirements</div>
+      </div>
+      <div class="floating-cards">
+        <div class="f-sidebar">
+          <div class="fi active">1. Ideation</div>
+          <div class="fi">2. System Design</div>
+          <div class="fi">3. UI/UX Design</div>
+          <div class="fi">4. Database</div>
+          <div class="fi">5. Backend</div>
+        </div>
+        <div class="f-main">
+          <div class="fm-phase">Phase 1 of 9</div>
+          <div class="fm-title">Problem Statement</div>
+          <div class="fm-text">Define what problem your app solves. This is where your journey begins.</div>
+          <div class="fm-insight">Every great product starts with understanding the pain. Not the code — the problem.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="selected-indicator" id="indicator"></div>
+
+<script>
+function toggleSelect(el) {
+  document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  const choice = el.dataset.choice;
+  const title = el.querySelector('.card-title').textContent;
+  const ind = document.getElementById('indicator');
+  ind.textContent = 'Selected: ' + title;
+  ind.style.display = 'block';
+
+  fetch('/api/event', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({type: 'click', choice, text: title, timestamp: Date.now()})
+  }).catch(() => {});
+}
+</script>
+
+</body>
+</html>

@@ -59,6 +59,15 @@ Summarize EVERYTHING that was built/coded:
 ```markdown
 ## 🏗️ Build Summary — [Date]
 
+- **Session Stats:** Duration, files changed, lines added/removed, tests
+- **Completed / In Progress / Blocked**
+- **Files Touched:** New, Modified, Deleted (with purpose)
+- **Tech Decisions:** Decision → Why → Alternatives → Trade-offs
+- **Bugs Squashed:** Bug → Root Cause → Solution → Prevention
+- **Code Quality:** Tests, Lint, Types, Build status
+- **Dependencies / Database / API Changes** (if applicable)
+- **Security & Performance Notes** (if applicable)
+
 ### ⚙️ Session Type: [Feature Building / Debugging / Refactoring / etc.]
 
 ### 📊 Session Stats:
@@ -189,7 +198,11 @@ Notes: [Any security-related observations]
 ---
 
 ### Step 4: Learning Capture 📚
-
+- **Technical Insights:** Concepts learned, patterns applied
+- **Architecture Understanding:** System knowledge gained, mental model updates
+- **Gotchas to Remember**
+- **Useful Resources Found**
+- **Ideas for Later / Technical Debt Identified**
 Document technical insights and learnings:
 
 ```markdown
