@@ -4,6 +4,44 @@
 
 ---
 
+# 📍 Bộ tài liệu này & Khi nào dùng
+
+> Đọc cái này TRƯỚC. Để biết mình đang cầm tài liệu gì, dành cho ai, và khi nào nên dùng cái nào.
+
+### 🎯 Tài liệu này là gì?
+
+Đây là **PHƯƠNG PHÁP HỌC** — cách đứng trước một codebase (lạ, hoặc của chính mình mà chưa nắm) và **xây dựng một mental model** về nó: hệ thống làm gì, dữ liệu chạy ra sao, logic nằm đâu, hỏng ở đâu.
+
+Nó **không** dạy bạn cách "nhận làm tác giả" hay cách trả lời phỏng vấn. Nó chỉ dạy một việc: **HIỂU hệ thống hoạt động như thế nào.**
+
+### 👤 Dành cho ai?
+
+- Dev mới onboard vào một dự án.
+- Bất kỳ ai đứng trước một hệ thống chưa nắm và không biết bắt đầu từ đâu.
+- Người cần xây nền tảng hiểu biết **trước khi** làm bất cứ điều gì sâu hơn.
+
+### 🕐 Dùng khi nào?
+
+**BƯỚC ĐẦU TIÊN.** Khi câu hỏi trong đầu bạn là: *"Cái hệ thống này rốt cuộc hoạt động ra sao?"*
+
+---
+
+### 🗺️ Bộ tài liệu 3 tầng — Bạn đang ở đâu?
+
+| | **CodeBase Understanding** | **Authorship Reclaim Playbook** | **Bản instance** (vd Asset Platform) |
+| --- | --- | --- | --- |
+| **Là gì** | Phương pháp HỌC | Phương pháp NHẬN LẠI quyền tác giả + luyện nói | Sản phẩm điền đầy |
+| **Trả lời câu** | "Hệ thống này hoạt động sao?" | "Làm sao bảo vệ nó như tác giả thật?" | "Dự án này CỤ THỂ ra sao" |
+| **Dành cho ai** | Dev cần hiểu code lạ | Người build bằng AI, chưa nắm 'vì sao' | Người ôn phỏng vấn dự án đó |
+| **Dùng khi nào** | Bước 1 — hiểu | Bước 2 — nhận tác giả + luyện | Bước 3 — ôn thi |
+| **Loại** | Method | Method (xây TRÊN cái bên trái) | Instance (clone từ template giữa) |
+
+> 📌 **YOU ARE HERE → CodeBase Understanding** (tài liệu Phương Pháp Học — nền móng của cả bộ).
+>
+> Hiểu xong hệ thống ở đây rồi, nếu bạn cần **nhận làm tác giả** và **bảo vệ quyết định trong phỏng vấn**, hãy đi tiếp sang **Authorship Reclaim Playbook**.
+
+---
+
 # 🎯 The Goal
 
 The goal is NOT:
