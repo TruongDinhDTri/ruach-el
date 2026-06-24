@@ -14,6 +14,26 @@
 
 Nó **không** dạy bạn cách "nhận làm tác giả" hay cách trả lời phỏng vấn. Nó chỉ dạy một việc: **HIỂU hệ thống hoạt động như thế nào.**
 
+### 🔬 Phân chia cốt lõi với Authorship Reclaim (đọc kỹ — đây là chỗ dễ lẫn nhất)
+
+Hai tài liệu KHÔNG trùng nhau, vì chúng khác nhau ở **hai trục**:
+
+**Trục 1 — Method vs Artifact (cách-làm vs sản-phẩm):**
+
+- `CodeBase Understanding` (tài liệu này) là **METHOD** — một how-to-think guide, đọc để biết *cách* tiếp cận. **Không có ô để điền.**
+- `Authorship Reclaim` (+ bản instance) là **ARTIFACT** — có ô trống để ĐIỀN, tạo ra một tài liệu cụ thể bạn cầm đi phỏng vấn.
+
+**Trục 2 — HOW vs WHY (hoạt-động-ra-sao vs vì-sao-xây-vậy):**
+
+- `CodeBase Understanding` trả lời **HOW**: feature *hoạt động* ra sao — trace luồng, quan sát, hiểu cơ chế.
+- `Authorship Reclaim` trả lời **WHY + cách KỂ**: feature được xây *vì sao*, đánh đổi gì, vấp trap nào, và *nói* nó ra sao trong phỏng vấn.
+
+> 🪞 Cùng một feature "chat":
+> - **CodeBase Understanding** hỏi: *"Tin nhắn đi từ đâu tới đâu? Lưu ở bảng nào?"* (HOW)
+> - **Authorship Reclaim** hỏi: *"Vì sao dedup thread theo {buyer, seller}? Đánh đổi gì? Lúc làm vấp bug gì? Kể lại sao cho thuyết phục?"* (WHY + kể)
+>
+> Bạn cần CẢ HAI: hiểu cơ chế ở ĐÂY (CodeBase Understanding) TRƯỚC → rồi gắn lý do + luyện kể (Authorship Reclaim) SAU.
+
 ### 👤 Dành cho ai?
 
 - Dev mới onboard vào một dự án.
@@ -36,9 +56,12 @@ Nó **không** dạy bạn cách "nhận làm tác giả" hay cách trả lời 
 | **Dùng khi nào** | Bước 1 — hiểu | Bước 2 — nhận tác giả + luyện | Bước 3 — ôn thi |
 | **Loại** | Method | Method (xây TRÊN cái bên trái) | Instance (clone từ template giữa) |
 
+> 🧭 **Còn một người anh em: `Trace Any Codebase` (Field Manual).** Nó là bản **THỰC CHIẾN, cô đặc** của CHÍNH tài liệu này (gói gọn PHASE 1-4 thành **6 bước chạy lệnh thật**). Khi cần trace NGAY một luồng mà chưa muốn đọc hết 11 phase → mở **Field Manual**. Cần hiểu SÂU & có hệ thống → ở lại ĐÂY. Hai cái bổ trợ nhau: Field Manual là cửa nhanh, tài liệu này là chiều sâu.
+
 > 📌 **YOU ARE HERE → CodeBase Understanding** (tài liệu Phương Pháp Học — nền móng của cả bộ).
 >
 > Hiểu xong hệ thống ở đây rồi, nếu bạn cần **nhận làm tác giả** và **bảo vệ quyết định trong phỏng vấn**, hãy đi tiếp sang **Authorship Reclaim Playbook**.
+> Cần trace nhanh tay (chạy lệnh) → mở **`Trace Any Codebase` Field Manual**.
 
 ---
 
@@ -1049,6 +1072,9 @@ AWS S3
 # 🔄 PHASE 4 — TRACE REAL FLOWS
 
 ### Goal: Understand the system dynamically
+
+> 🔁 **Cầu nối → `Authorship Reclaim`:** Đây là điểm gặp nhau chính. Trace xong HOW ở phase này → mang qua `Authorship Reclaim` (ô **3B Trace luồng** hoặc dòng **"Flow"** của **Feature Deep-Dives**) để gắn WHY + trap + luyện kể. HOW (ở đây) là nền; WHY (bên đó) xây trên nó.
+> 🧭 **Muốn bản tay-làm-ngay của phase này?** → `Trace Any Codebase` (Field Manual) gói PHASE 1-4 thành **6 bước chạy lệnh thật** (ls → grep → controller → service → DB → return). Dùng nó để trace nhanh, rồi quay về đây khi cần chiều sâu.
 
 ---
 

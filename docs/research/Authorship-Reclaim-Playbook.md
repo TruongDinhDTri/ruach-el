@@ -24,6 +24,26 @@
 
 > Nói ngắn gọn: `CodeBase Understanding` xây cho bạn cái **mental model**. `Authorship Reclaim` lấy mental model đó, **gắn lý do vào từng quyết định**, rồi **biến nó thành lời bạn nói được trong phòng phỏng vấn**.
 
+### 🔬 Phân chia cốt lõi (đọc kỹ — đây là chỗ dễ lẫn nhất)
+
+Hai tài liệu KHÔNG trùng nhau, vì chúng khác nhau ở **hai trục**:
+
+**Trục 1 — Method vs Artifact (cách-làm vs sản-phẩm):**
+
+- `CodeBase Understanding` là **METHOD** — một how-to-think guide, đọc để biết *cách* tiếp cận. Không có ô để điền.
+- `Authorship Reclaim` (tài liệu này + bản instance) là **ARTIFACT** — có ô trống để ĐIỀN, tạo ra một tài liệu cụ thể bạn cầm đi phỏng vấn.
+
+**Trục 2 — HOW vs WHY (hoạt-động-ra-sao vs vì-sao-xây-vậy):**
+
+- `CodeBase Understanding` trả lời **HOW**: feature *hoạt động* ra sao — trace luồng, quan sát, hiểu cơ chế.
+- `Authorship Reclaim` trả lời **WHY + cách KỂ**: feature được xây *vì sao*, đánh đổi gì, vấp trap nào, và *nói* nó ra sao trong phỏng vấn.
+
+> 🪞 Cùng một feature "chat":
+> - **CodeBase Understanding** hỏi: *"Tin nhắn đi từ đâu tới đâu? Lưu ở bảng nào?"* (HOW)
+> - **Authorship Reclaim** hỏi: *"Vì sao dedup thread theo {buyer, seller}? Đánh đổi gì? Lúc làm vấp bug gì? Kể lại sao cho thuyết phục?"* (WHY + kể)
+>
+> Bạn cần CẢ HAI: hiểu cơ chế (CodeBase Understanding) TRƯỚC → rồi gắn lý do + luyện kể ở ĐÂY (Authorship Reclaim) SAU.
+
 ### 👤 Dành cho ai?
 
 - Người đã build sản phẩm bằng AI agent nhưng chưa nắm sâu "vì sao" của các quyết định.
@@ -75,6 +95,22 @@ Khi AI viết code, nó không để lại lý do trong đầu bạn — nhưng 
 
 > 💡 **Sự thật an ủi:** AI gần như luôn chọn phương án **kinh điển, mainstream** (Postgres, JWT, REST, layered...). Mà cái gì kinh điển thì lý do biện minh cho nó cũng kinh điển — và **học được**. Bạn không cần đọc tâm trí AI; bạn chỉ cần hiểu *vì sao lựa chọn đó là lựa chọn đúng*.
 
+### 🔗 LIÊN KẾT với `CodeBase Understanding` — Đến đâu, nhảy đâu, hỏi gì
+
+> **Sống ở file NÀY (artifact).** Vài ô cần với tay mở **dụng cụ** ra — vì cần hiểu code THẬT, không đoán. Còn lại điền thẳng.
+>
+> ⚠️ **LUẬT THỨ TỰ:** trước khi trace luồng (3B) hay mổ feature (5), **PHẢI map cấu trúc tổng trước** (BƯỚC 0) — không có bản đồ thì trace sẽ lạc. Đào chi tiết khi chưa orient = "mông lung".
+
+| Khi điền ô... | → Mở dụng cụ | Câu hỏi MANG THEO khi đào code |
+| --- | --- | --- |
+| **BƯỚC 0 — Map cấu trúc trước** (3A + định vị code) | `Trace Any Codebase` (BƯỚC 1) **+** `CodeBase Understanding` **PHASE 1-3** | App làm gì? → Entry point ở đâu (`main`/`app.module`)? → Có những module/khối nào (`ls src/`)? → Nối nhau ra sao? |
+| **3B Trace luồng** | `Trace Any Codebase` (6 bước) **+** `CodeBase Understanding` PHASE 4 | Gì kích hoạt? → API nào? → Validate đâu? → Business logic đâu? → Bảng nào? → Trả gì? |
+| **3C Data model** | `CodeBase Understanding` PHASE 5 (Study DB Schema) | Entity chính? → Quan hệ? → Bảng quan trọng nhất? → Source of truth? |
+| **5 Feature → dòng "Flow"** | `Trace Any Codebase` (6 bước) **+** PHASE 4 | (như 3B, cho riêng feature đó) |
+
+> 🔁 **Quy trình:** BƯỚC 0 (map cấu trúc) → mở Phase/6-bước → đào code tới khi HIỂU → quay lại điền "Flow" → rồi gắn WHY/trap. HOW là nền, WHY xây trên nó.
+> ✅ Ô khác (Soul, Stack, Decision Map, Limitations, Ownership, Talk Track) → điền từ đầu bạn + commit + issues, KHÔNG cần mở dụng cụ.
+
 ---
 
 # 1️⃣ THE SOUL — Linh hồn sản phẩm
@@ -123,7 +159,45 @@ Khi AI viết code, nó không để lại lý do trong đầu bạn — nhưng 
 
 ---
 
-# 3️⃣ THE DECISION MAP ★ — Bản đồ quyết định (TRÁI TIM)
+# 3️⃣ SYSTEM MAP & DATA FLOW — Bản đồ hệ thống & luồng dữ liệu
+
+> Trả lời 2 câu kinh điển: **"Vẽ kiến trúc ra giấy đi"** và **"Trace 1 request từ đầu tới cuối"**.
+> Không vẽ được hệ thống từ trí nhớ → chưa thật sự nắm.
+
+### 3A. Sơ đồ kiến trúc (component diagram) — ⭐ BƯỚC 0, LÀM TRƯỚC TIÊN
+
+> Vẽ các khối lớn + cách nối nhau. ASCII xấu cũng quý.
+> 🧭 **Chưa có sơ đồ này? Dựng nó TRƯỚC khi trace 3B.** Cách dựng: `Trace Any Codebase` BƯỚC 1 (`ls src/` + `cat main`/`app.module`) **+** `CodeBase Understanding` PHASE 1-3. Có bản đồ rồi mới trace luồng khỏi lạc.
+
+```
+[Client(s)] → [API / Gateway] → [Service / Module layer] → [Database]
+                                        ↓
+                       [Cache]  [Queue/Cron]  [3rd-party]  [Storage]
+```
+
+___ *(thay bằng sơ đồ thật)*
+
+### 3B. Trace 1-2 luồng quan trọng (request lifecycle)
+
+> 🔗 **Cần đào code? → `CodeBase Understanding` PHASE 4.** Hỏi: gì kích hoạt → API nào → validate đâu → business logic đâu → bảng nào → trả gì?
+> Trace: UI → API → validate → business/service → DB → async → response.
+
+- **Luồng [tên]:** ___ → ___ → ___ → ___
+
+### 3C. Data Model — entity & quan hệ
+
+> 🔗 **Cần đào code? → `CodeBase Understanding` PHASE 5.** Hỏi: entity chính? → quan hệ? → bảng quan trọng nhất? → source of truth?
+> "Bảng/entity chính là gì, quan hệ ra sao." DB lộ ra domain thật.
+
+- **Entity chính:** ___
+- **Quan hệ:** ___
+- **Source of truth:** ___
+
+> 📥 Nguồn: entry point (main/app), router, ORM models/migrations, docker-compose (thấy các service).
+
+---
+
+# 4️⃣ THE DECISION MAP ★ — Bản đồ quyết định (TRÁI TIM)
 
 > Đây là phần chiếm ~70% phỏng vấn senior. Mỗi quyết định = một câu trả lời đã viết sẵn.
 > Công thức mỗi dòng: **Quyết định → Vì sao → Đánh đổi (cái mình hy sinh) → Câu phỏng vấn nó trả lời.**
@@ -155,7 +229,59 @@ Khi AI viết code, nó không để lại lý do trong đầu bạn — nhưng 
 
 ---
 
-# 4️⃣ THE TALK TRACK — Luyện nói (Bài tập cuối)
+# 5️⃣ FEATURE DEEP-DIVES — Mổ xẻ từng feature
+
+> Trả lời câu phỏng vấn nguy hiểm NGAY SAU "vì sao": **"Kể anh đã XÂY feature X như thế nào?"**
+> System design là cái khung; **feature-development là máu thịt** — kinh nghiệm thật nằm ở từng decision point, từng trap, từng bottleneck đã giải khi làm feature. Đừng làm mọi feature — chọn **5-8 cái xương sống**.
+> 🔗 **Mỗi feature:** dòng **"Flow"** → mở `CodeBase Understanding` PHASE 4 (trace tới khi HIỂU). Dòng **"vì sao / trap"** → từ commit/issues + đầu bạn.
+
+### Block mẫu (copy cho mỗi feature):
+
+```
+### [Tên feature]
+- Là gì + vì sao có:                 ___
+- Flow end-to-end:                   ___ → ___ → ___
+- Quyết định kiến trúc bên trong:    ___
+- Vì sao cách này (vs cách khác):    ___
+- ⭐ Trap / bottleneck đã gặp & giải: ___   ← phần VÀNG nhất
+- Câu phỏng vấn nó trả lời:          "Kể anh làm [feature] thế nào?"
+- Bằng chứng:                        commit ___ / issue ___
+```
+
+> 📥 **Nguồn để điền:** commit `feat(...)` của feature + issue mô tả nó + code module tương ứng. Đặc biệt soi các commit `fix(...)` QUANH feature đó — chúng chính là "trap đã giải", phần đắt giá nhất khi kể chuyện.
+
+---
+
+# 6️⃣ KNOWN LIMITATIONS & WHAT I'D DO DIFFERENTLY — Giới hạn & nếu làm lại
+
+> Câu "nếu làm lại đổi gì / nợ kỹ thuật là gì?" — biết TRƯỚC = trông như senior + chặn câu gotcha.
+> Thành thật về giới hạn cho thấy sự TRƯỞNG THÀNH, không phải điểm yếu.
+
+- **Nợ kỹ thuật đã biết:** ___
+- **Cái sẽ làm khác nếu có thời gian/nguồn lực:** ___
+- **Đánh đổi đã chấp nhận (và vì sao chấp nhận được lúc đó):** ___
+- **Bottleneck sẽ vỡ trước khi scale:** ___
+
+> 📥 Nguồn: commit `TODO`/`FIXME`/`hack`, issue backlog/cancelled, các "gap" ghi trong docs/commit.
+
+---
+
+# 7️⃣ OWNERSHIP & MY CONTRIBUTION — Phần này là CỦA TÔI
+
+> ⭐ Câu chí tử khi code do AI build nhiều: **"Phần nào ANH thật sự làm?"**
+> Trả lời tệ = mất hết uy tín. Trả lời tốt = biến "AI làm hộ" thành "tôi chỉ huy & sửa chữa cỗ máy".
+> Nguyên tắc: KHÔNG nói dối — nhưng kể đúng phần *judgment* & *quyết định* mình sở hữu.
+
+- **AI / đồng đội xây phần khung nào:** ___
+- **TÔI thật sự quyết định / sửa / bắt lỗi gì:** ___ *(judgment, không phải số dòng code)*
+- **Bằng chứng quyền tác giả:** ___ *(git authorship, commit, quyết định kiến trúc)*
+- **Cách tôi sẽ NÓI về việc dùng AI (trung thực + tự tin):** ___
+
+> 💡 Khung trả lời an toàn: *"AI/team dựng scaffolding; phần tôi sở hữu là [judgment X, bắt bug Y, quyết định Z]. Giá trị tôi mang là biết CÁI GÌ đúng và VÌ SAO — kể cả khi AI làm sai, tôi là người phát hiện và sửa."*
+
+---
+
+# 8️⃣ THE TALK TRACK — Luyện nói (Bài tập cuối)
 
 > Hiểu ≠ Nói được. Phỏng vấn là màn trình diễn dưới áp lực, không phải bài kiểm tra viết.
 > Phần này: viết câu hỏi xoáy + tự trả lời thành lời. Đọc TO. Ghi âm. Nghe lại.
